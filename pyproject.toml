@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "acdlo"
+version = "0.0.1"
+description = "SymPy-derived functions for modelling deformable linear objects using affine curvature"
+dependencies = [
+    "numpy",
+    "sympy",
+]
+
+[tool.setuptools.package-data]
+"acdlo.sympy_fcns.fb" = ["*"]
+"acdlo.sympy_fcns.sb" = ["*"]
