@@ -14,12 +14,32 @@ num_masses = 6  # Number of masses to discretise along length (not including end
 gamma = sm.symbols('gamma')  # Gravity direction
 
 # Configuration variables
-theta_0, theta_1 = sm.symbols('theta_0 theta_1')
-theta = sm.Matrix([theta_0, theta_1])
-dtheta_0, dtheta_1 = sm.symbols('dtheta_0 dtheta_1')
-dtheta = sm.Matrix([dtheta_0, dtheta_1])
-ddtheta_0, ddtheta_1 = sm.symbols('ddtheta_0 ddtheta_1')
-ddtheta = sm.Matrix([ddtheta_0, ddtheta_1])
+
+# --- First order polynomial vairables --- #
+# theta_0, theta_1 = sm.symbols('theta_0 theta_1')
+# theta = sm.Matrix([theta_0, theta_1])
+# dtheta_0, dtheta_1 = sm.symbols('dtheta_0 dtheta_1')
+# dtheta = sm.Matrix([dtheta_0, dtheta_1])
+# ddtheta_0, ddtheta_1 = sm.symbols('ddtheta_0 ddtheta_1')
+# ddtheta = sm.Matrix([ddtheta_0, ddtheta_1])
+
+# --- Second order polynomial variables --- #
+# theta_0, theta_1, theta_2 = sm.symbols('theta_0 theta_1 theta_2')
+# theta = sm.Matrix([theta_0, theta_1, theta_2])
+# dtheta_0, dtheta_1, dtheta_2 = sm.symbols('dtheta_0 dtheta_1 dtheta_2')
+# dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2])
+# ddtheta_0, ddtheta_1, ddtheta_2 = sm.symbols('ddtheta_0 ddtheta_1 ddtheta_2')
+# ddtheta = sm.Matrix([ddtheta_0, ddtheta_1, ddtheta_2])
+
+# --- Third order polynomial variables --- #
+theta_0, theta_1, theta_2, theta_3 = sm.symbols('theta_0 theta_1 theta_2 theta_3')
+theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3])
+dtheta_0, dtheta_1, dtheta_2, dtheta_3 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3')
+dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3])
+ddtheta_0, ddtheta_1, ddtheta_2, ddtheta_3 = sm.symbols('ddtheta_0 ddtheta_1 ddtheta_2 ddtheta_3')
+ddtheta = sm.Matrix([ddtheta_0, ddtheta_1, ddtheta_2, ddtheta_3])
+
+
 
 # Object coordinates in global frame (forward kinematics)
 fk_x, fk_z = sm.symbols('fk_x fk_z')
@@ -34,7 +54,16 @@ s, v, d = sm.symbols('s v d')
 tic = time.perf_counter()
 
 # Spine x,z in object base frame, defined as if it was reflected in the robot XY plane
-alpha = theta_0*v + 0.5*theta_1*v**2
+
+# --- First order polynomial equation --- #
+# alpha = theta_0*v + 0.5*theta_1*v**2
+
+# --- Second order polynomial equation --- #
+# alpha = theta_0*v + 0.5*theta_1*v**2  + 1/3*theta_2*v**3
+
+# --- Third order polynomial equation --- #
+alpha = theta_0*v + 0.5*theta_1*v**2  + 1/3*theta_2*v**3 + 1/4*theta_2*v**4 
+
 fk[0] = -L*sm.integrate(sm.sin(alpha),(v, 0, s)) # x. when theta=0, x=0.
 fk[1] = -L*sm.integrate(sm.cos(alpha),(v, 0, s)) # z. when theta=0, z=-L. 
 # A manual subsitution is needed here to get around a SymPy bug: https://github.com/sympy/sympy/issues/25093
@@ -104,10 +133,22 @@ pickle.dump(B, open("../src/acdlo/sympy_fcns/sb/B", "wb"))
 # Centrifugal/Coriolis matrix
 tic = time.perf_counter()
 
-C = sm.zeros(2,2)      
-for i in range(2):            
-    for j in range(2):    
-        for k in range(2):
+# C = sm.zeros(2,2)      
+len_theta = len(theta)
+print("len_theta: ", len_theta)
+
+C = sm.zeros(len_theta, len_theta)      
+
+# for i in range(2):            
+#     for j in range(2):    
+#         for k in range(2):
+#             Christoffel = 0.5*(sm.diff(B[i,j],theta[k]) + sm.diff(B[i,k],theta[j]) - sm.diff(B[j,k],theta[i]))
+#             C[i,j] = C[i,j] + Christoffel*dtheta[k]
+
+
+for i in range(len_theta):            
+    for j in range(len_theta):    
+        for k in range(len_theta):
             Christoffel = 0.5*(sm.diff(B[i,j],theta[k]) + sm.diff(B[i,k],theta[j]) - sm.diff(B[j,k],theta[i]))
             C[i,j] = C[i,j] + Christoffel*dtheta[k]
 

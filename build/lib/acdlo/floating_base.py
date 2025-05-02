@@ -10,20 +10,10 @@ from pathlib import Path
 m_L, m_E, L, D = sm.symbols('m_L m_E L D')  # m_L - total mass of cable, m_E - mass of weighted end
 p = sm.Matrix([m_L, m_E, L, D])
 # Configuration variables
-
-# --- First order polynomial variables --- #
-# theta_0, theta_1, x, z, phi = sm.symbols('theta_0 theta_1 x z phi')
-# q = sm.Matrix([theta_0, theta_1, x, z, phi])
-# dtheta_0, dtheta_1, dx, dz, dphi = sm.symbols('dtheta_0 dtheta_1 dx dz dphi')
-# dq = sm.Matrix([dtheta_0, dtheta_1, dx, dz, dphi])
-
-
-# --- Second order polynomial variables --- #
-theta_0, theta_1, theta_2, x, z, phi = sm.symbols('theta_0 theta_1 theta_2 x z phi')
-q = sm.Matrix([theta_0, theta_1, theta_2, x, z, phi])
-dtheta_0, dtheta_1, dtheta_2, dx, dz, dphi = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dx dz dphi')
-dq = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dx, dz, dphi])
-
+theta_0, theta_1, x, z, phi = sm.symbols('theta_0 theta_1 x z phi')
+q = sm.Matrix([theta_0, theta_1, x, z, phi])
+dtheta_0, dtheta_1, dx, dz, dphi = sm.symbols('dtheta_0 dtheta_1 dx dz dphi')
+dq = sm.Matrix([dtheta_0, dtheta_1, dx, dz, dphi])
 # Integration variables
 s, d = sm.symbols('s d')
 # Gravity direction
