@@ -13,13 +13,32 @@ p = sm.Matrix([m_L, m_E, L, D])
 num_masses = 6  # Number of masses to discretise along length (not including end mass)
 gamma = sm.symbols('gamma')  # Gravity direction
 
-# Configuration variables
+#--- Configuration variables ---#
+
+# 0 order
+
+# 1st order 
+
 theta_0, theta_1 = sm.symbols('theta_0 theta_1')
 theta = sm.Matrix([theta_0, theta_1])
 dtheta_0, dtheta_1 = sm.symbols('dtheta_0 dtheta_1')
 dtheta = sm.Matrix([dtheta_0, dtheta_1])
 ddtheta_0, ddtheta_1 = sm.symbols('ddtheta_0 ddtheta_1')
 ddtheta = sm.Matrix([ddtheta_0, ddtheta_1])
+
+# 2nd order 
+
+# theta_0, theta_1, theta_2 = sm.symbols('theta_0 theta_1 theta_2')
+# theta = sm.Matrix([theta_0, theta_1, theta_2])
+# dtheta_0, dtheta_1, dtheta_2 = sm.symbols('dtheta_0 dtheta_1 dtheta_2')
+# dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2])
+# ddtheta_0, ddtheta_1, ddtheta_2 = sm.symbols('ddtheta_0 ddtheta_1 ddtheta_2')
+# ddtheta = sm.Matrix([ddtheta_0, ddtheta_1, ddtheta_2])
+#
+
+# 3rd order
+
+# 4th order
 
 # Object coordinates in global frame (forward kinematics)
 fk_x, fk_z = sm.symbols('fk_x fk_z')
@@ -34,7 +53,10 @@ s, v, d = sm.symbols('s v d')
 tic = time.perf_counter()
 
 # Spine x,z in object base frame, defined as if it was reflected in the robot XY plane
-alpha = theta_0*v + 0.5*theta_1*v**2
+alpha = theta_0 + theta_1*v 
+# alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
+# alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
+# alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
 fk[0] = -L*sm.integrate(sm.sin(alpha),(v, 0, s)) # x. when theta=0, x=0.
 fk[1] = -L*sm.integrate(sm.cos(alpha),(v, 0, s)) # z. when theta=0, z=-L. 
 # A manual subsitution is needed here to get around a SymPy bug: https://github.com/sympy/sympy/issues/25093
@@ -51,6 +73,7 @@ fk = fk + D*rot_alpha@sm.Matrix([d, 0])
 # fk_end_static = fk.subs(s, 1)
 # J_mid_static = fk_mid_static.jacobian(sm.Matrix([theta_0, theta_1]))
 # J_end_static = fk_end_static.jacobian(sm.Matrix([theta_0, theta_1]))
+J_static = fk.jacobian(theta) 
 
 toc = time.perf_counter()
 print("FK gen time: " + str(toc-tic))
@@ -60,11 +83,13 @@ pickle.dump(fk, open("../src/acdlo/sympy_fcns/sb/fk", "wb"))
 # pickle.dump(fk_end_static, open("../src/acdlo/sympy_fcns/sb/fk_end_static", "wb"))
 # pickle.dump(J_mid_static, open("../src/acdlo/sympy_fcns/sb/J_mid_static", "wb"))
 # pickle.dump(J_end_static, open("../src/acdlo/sympy_fcns/sb/J_end_static", "wb"))
+pickle.dump(fk, open("../src/acdlo/sympy_fcns/sb/J_static", "wb"))
 f_FK = sm.lambdify((theta,p,s,d), fk, "mpmath")
 # f_FK_mf = sm.lambdify((theta,p), fk_mid_static, "mpmath")
 # f_FK_ef = sm.lambdify((theta,p), fk_end_static, "mpmath")
 # f_J_mf = sm.lambdify((theta,p), J_mid_static, "mpmath")
 # f_J_ef = sm.lambdify((theta,p), J_end_static, "mpmath")
+f_J = sm.lambdify((theta,p,s,d), J_static, "mpmath")
 
 #%% 
 # Potential (gravity) vector

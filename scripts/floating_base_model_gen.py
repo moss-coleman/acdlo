@@ -32,7 +32,12 @@ s, v, d = sm.symbols('s v d')
 # Forward Kinematics
 tic = time.perf_counter()
 
+poly_order = 1
+
+alpha =  
+
 # Spine x,z in object base frame, defined as if it was reflected in the robot XY plane
+# alpha = theta_0*v + 0.5*theta_1*v**2 # negative curvature so sense matches robot frame Y axis rotation
 alpha = theta_0*v + 0.5*theta_1*v**2 # negative curvature so sense matches robot frame Y axis rotation
 fk[0] = -L*sm.integrate(sm.sin(alpha),(v, 0, s)) # x. when theta=0, x=0.
 fk[1] = -L*sm.integrate(sm.cos(alpha),(v, 0, s)) # z. when theta=0, z=-L. 
