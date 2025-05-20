@@ -3,6 +3,8 @@
 import time
 import sympy as sm
 import pickle
+import numpy as np
+import mpmath as mp
 
 #%%
 # Init
@@ -76,6 +78,7 @@ fk = fk + D*rot_alpha@sm.Matrix([d, 0])
 # J_end_static = fk_end_static.jacobian(sm.Matrix([theta_0, theta_1]))
 # J_static = fk.jacobian(theta) 
 J_static = fk.jacobian(sm.Matrix([theta_0, theta_1]))
+# J_static = fk.jacobian(sm.Matrix([theta_0, theta_1, theta_2]))
 
 toc = time.perf_counter()
 print("FK gen time: " + str(toc-tic))
@@ -85,13 +88,22 @@ pickle.dump(fk, open("../src/acdlo/sympy_fcns/sb/fk", "wb"))
 # pickle.dump(fk_end_static, open("../src/acdlo/sympy_fcns/sb/fk_end_static", "wb"))
 # pickle.dump(J_mid_static, open("../src/acdlo/sympy_fcns/sb/J_mid_static", "wb"))
 # pickle.dump(J_end_static, open("../src/acdlo/sympy_fcns/sb/J_end_static", "wb"))
-pickle.dump(fk, open("../src/acdlo/sympy_fcns/sb/J_static", "wb"))
 f_FK = sm.lambdify((theta,p,s,d), fk, "mpmath")
 # f_FK_mf = sm.lambdify((theta,p), fk_mid_static, "mpmath")
 # f_FK_ef = sm.lambdify((theta,p), fk_end_static, "mpmath")
 # f_J_mf = sm.lambdify((theta,p), J_mid_static, "mpmath")
 # f_J_ef = sm.lambdify((theta,p), J_end_static, "mpmath")
+pickle.dump(J_static, open("../src/acdlo/sympy_fcns/sb/J_static", "wb"))
 f_J = sm.lambdify((theta,p,s,d), J_static, "mpmath")
+# __import__('pprint').pprint(J_static)
+print("shape of J_static: " + str(J_static.shape))
+# print("Example of J_static: " + str(J_static.subs({theta_0:0, theta_1:0, m_L:0.5, m_E:0.5, L:1, D:0.1})))
+print("Example of f_J: " + str(f_J([0.1,0.1], [0.5,0.5,1,0.1], 0.5, 0.1)))
+
+def eval_J(theta, p_vals, s, d): 
+    return np.array(f_J(theta, p_vals, s, d).apply(mp.re).tolist(), dtype=float)
+
+print("Example test of eval_J: ", eval_J([0.1,0.1], [0.5,0.5,1,0.1], 0.5, 0.1))
 
 #%% 
 # Potential (gravity) vector
