@@ -19,17 +19,24 @@ p = sm.Matrix([m_L, m_E, L, D])
 
 # 2nd order 
 
-theta_0, theta_1, theta_2 = sm.symbols('theta_0 theta_1 theta_2')
-theta = sm.Matrix([theta_0, theta_1, theta_2])
-dtheta_0, dtheta_1, dtheta_2 = sm.symbols('dtheta_0 dtheta_1 dtheta_2')
-dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2])
+# theta_0, theta_1, theta_2 = sm.symbols('theta_0 theta_1 theta_2')
+# theta = sm.Matrix([theta_0, theta_1, theta_2])
+# dtheta_0, dtheta_1, dtheta_2 = sm.symbols('dtheta_0 dtheta_1 dtheta_2')
+# dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2])
 
 # 3rd order 
 
-theta_0, theta_1, theta_2, theta_3 = sm.symbols('theta_0 theta_1 theta_2 theta_3')
-theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3])
-dtheta_0, dtheta_1, dtheta_2, dtheta_3 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3')
-dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3])
+# theta_0, theta_1, theta_2, theta_3 = sm.symbols('theta_0 theta_1 theta_2 theta_3')
+# theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3])
+# dtheta_0, dtheta_1, dtheta_2, dtheta_3 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3')
+# dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3])
+
+# 4th order 
+
+theta_0, theta_1, theta_2, theta_3, theta_4 = sm.symbols('theta_0 theta_1 theta_2 theta_3 theta_4')
+theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3, theta_4])
+dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3 dtheta_4')
+dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4])
 
 
 # Integration variables
