@@ -16,7 +16,7 @@ num_masses = 6  # Number of masses to discretise along length (not including end
 gamma = sm.symbols('gamma')  # Gravity direction
 
 #--- Configuration variables ---#
-poly_order = 2 
+poly_order = 3
 # 0 order
 
 # 1st order 
@@ -30,15 +30,22 @@ poly_order = 2
 
 # 2nd order 
 
-theta_0, theta_1, theta_2 = sm.symbols('theta_0 theta_1 theta_2')
-theta = sm.Matrix([theta_0, theta_1, theta_2])
-dtheta_0, dtheta_1, dtheta_2 = sm.symbols('dtheta_0 dtheta_1 dtheta_2')
-dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2])
-ddtheta_0, ddtheta_1, ddtheta_2 = sm.symbols('ddtheta_0 ddtheta_1 ddtheta_2')
-ddtheta = sm.Matrix([ddtheta_0, ddtheta_1, ddtheta_2])
+# theta_0, theta_1, theta_2 = sm.symbols('theta_0 theta_1 theta_2')
+# theta = sm.Matrix([theta_0, theta_1, theta_2])
+# dtheta_0, dtheta_1, dtheta_2 = sm.symbols('dtheta_0 dtheta_1 dtheta_2')
+# dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2])
+# ddtheta_0, ddtheta_1, ddtheta_2 = sm.symbols('ddtheta_0 ddtheta_1 ddtheta_2')
+# ddtheta = sm.Matrix([ddtheta_0, ddtheta_1, ddtheta_2])
 #
 
 # 3rd order
+
+theta_0, theta_1, theta_2, theta_3 = sm.symbols('theta_0 theta_1 theta_2 theta_3')
+theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3])
+dtheta_0, dtheta_1, dtheta_2, dtheta_3 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3')
+dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3])
+ddtheta_0, ddtheta_1, ddtheta_2, ddtheta_3 = sm.symbols('ddtheta_0 ddtheta_1 ddtheta_2 ddtheta_3')
+ddtheta = sm.Matrix([ddtheta_0, ddtheta_1, ddtheta_2, ddtheta_3])
 
 # 4th order
 
@@ -57,8 +64,8 @@ tic = time.perf_counter()
 # Spine x,z in object base frame, defined as if it was reflected in the robot XY plane
 # alpha = theta_0 + theta_1*v 
 # alpha = theta_0*v + 0.5*theta_1*v**2
-alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
+alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2 + (1/6)*theta_3*v**3
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
 fk[0] = -L*sm.integrate(sm.sin(alpha),(v, 0, s)) # x. when theta=0, x=0.
 fk[1] = -L*sm.integrate(sm.cos(alpha),(v, 0, s)) # z. when theta=0, z=-L. 
@@ -78,7 +85,7 @@ fk = fk + D*rot_alpha@sm.Matrix([d, 0])
 # J_end_static = fk_end_static.jacobian(sm.Matrix([theta_0, theta_1]))
 # J_static = fk.jacobian(theta) 
 # J_static = fk.jacobian(sm.Matrix([theta_0, theta_1]))
-J_static = fk.jacobian(sm.Matrix([theta_0, theta_1, theta_2]))
+J_static = fk.jacobian(sm.Matrix([theta_0, theta_1, theta_2, theta_3]))
 
 toc = time.perf_counter()
 print("FK gen time: " + str(toc-tic))

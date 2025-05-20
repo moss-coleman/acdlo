@@ -11,6 +11,7 @@ p = sm.Matrix([m_L, m_E, L, D])
 # Configuration variables
 
 # 1st order
+ 
 # theta_0, theta_1 = sm.symbols('theta_0 theta_1')
 # theta = sm.Matrix([theta_0, theta_1])
 # dtheta_0, dtheta_1 = sm.symbols('dtheta_0 dtheta_1')
@@ -22,6 +23,14 @@ theta_0, theta_1, theta_2 = sm.symbols('theta_0 theta_1 theta_2')
 theta = sm.Matrix([theta_0, theta_1, theta_2])
 dtheta_0, dtheta_1, dtheta_2 = sm.symbols('dtheta_0 dtheta_1 dtheta_2')
 dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2])
+
+# 3rd order 
+
+theta_0, theta_1, theta_2, theta_3 = sm.symbols('theta_0 theta_1 theta_2 theta_3')
+theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3])
+dtheta_0, dtheta_1, dtheta_2, dtheta_3 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3')
+dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3])
+
 
 # Integration variables
 s, d = sm.symbols('s d')
