@@ -55,8 +55,8 @@ s, v, d = sm.symbols('s v d')
 tic = time.perf_counter()
 
 # Spine x,z in object base frame, defined as if it was reflected in the robot XY plane
-# alpha = theta_0 + theta_1*v 
-alpha = theta_0*v + 0.5*theta_1*v**2
+alpha = theta_0 + theta_1*v 
+# alpha = theta_0*v + 0.5*theta_1*v**2
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
@@ -96,14 +96,14 @@ f_FK = sm.lambdify((theta,p,s,d), fk, "mpmath")
 pickle.dump(J_static, open("../src/acdlo/sympy_fcns/sb/J_static", "wb"))
 f_J = sm.lambdify((theta,p,s,d), J_static, "mpmath")
 # __import__('pprint').pprint(J_static)
-print("shape of J_static: " + str(J_static.shape))
+# print("shape of J_static: " + str(J_static.shape))
 # print("Example of J_static: " + str(J_static.subs({theta_0:0, theta_1:0, m_L:0.5, m_E:0.5, L:1, D:0.1})))
-print("Example of f_J: " + str(f_J([0.1,0.1], [0.5,0.5,1,0.1], 0.5, 0.1)))
+# print("Example of f_J: " + str(f_J([0.1,0.1], [0.5,0.5,1,0.1], 0.5, 0.1)))
 
 def eval_J(theta, p_vals, s, d): 
     return np.array(f_J(theta, p_vals, s, d).apply(mp.re).tolist(), dtype=float)
 
-print("Example test of eval_J: ", eval_J([0.1,0.1], [0.5,0.5,1,0.1], 0.5, 0.1))
+# print("Example test of eval_J: ", eval_J([0.1,0.1], [0.5,0.5,1,0.1], 0.5, 0.1))
 
 #%% 
 # Potential (gravity) vector

@@ -24,12 +24,11 @@ def eval_fk(theta, p_vals, s, d):
     return np.array(f_FK(theta, p_vals, s, d).apply(mp.re).tolist(), dtype=float)
 
 f_J = sm.lambdify((theta,p,s,d), pickle.load(open(Path(__file__).parent / "sympy_fcns/sb/J_static", "rb")), "mpmath")
-print("Example test of f_J: ", f_J([0.1, 0.1], [0.5,0.5,1,0.1], 0.5, 0.1))
+# print("Example test of f_J: ", f_J([0.1, 0.1], [0.5,0.5,1,0.1], 0.5, 0.1))
 def eval_J(theta, p_vals, s, d): 
     return np.array(f_J(theta, p_vals, s, d).apply(mp.re).tolist(), dtype=float)
 
-
-print("Example test of eval_J: ", eval_J([0.1,0.1], [0.5,0.5,1,0.1], 0.5, 0.1))
+# print("Example test of eval_J: ", eval_J([0.1,0.1], [0.5,0.5,1,0.1], 0.5, 0.1))
 
 f_FK_mid = sm.lambdify((theta,p), pickle.load(open(Path(__file__).parent / "sympy_fcns/sb/fk_mid_static", "rb")), "mpmath")
 def eval_midpt(theta, p_vals): 
