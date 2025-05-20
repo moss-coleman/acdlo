@@ -10,6 +10,13 @@ m_L, m_E, L, D = sm.symbols('m_L m_E L D')  # m_L - total mass of cable, m_E - m
 p = sm.Matrix([m_L, m_E, L, D])
 # Configuration variables
 
+# 0 orderr
+
+theta_0 = sm.symbols('theta_0')
+theta = sm.Matrix([theta_0])
+dtheta_0 = sm.symbols('dtheta_0')
+dtheta = sm.Matrix([dtheta_0])
+
 # 1st order
  
 # theta_0, theta_1 = sm.symbols('theta_0 theta_1')
@@ -33,10 +40,10 @@ p = sm.Matrix([m_L, m_E, L, D])
 
 # 4th order 
 
-theta_0, theta_1, theta_2, theta_3, theta_4 = sm.symbols('theta_0 theta_1 theta_2 theta_3 theta_4')
-theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3, theta_4])
-dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3 dtheta_4')
-dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4])
+# theta_0, theta_1, theta_2, theta_3, theta_4 = sm.symbols('theta_0 theta_1 theta_2 theta_3 theta_4')
+# theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3, theta_4])
+# dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3 dtheta_4')
+# dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4])
 
 
 # Integration variables

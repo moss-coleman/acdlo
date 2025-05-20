@@ -16,8 +16,15 @@ num_masses = 6  # Number of masses to discretise along length (not including end
 gamma = sm.symbols('gamma')  # Gravity direction
 
 #--- Configuration variables ---#
-poly_order = 4 
+poly_order = 0 
 # 0 order
+
+theta_0 = sm.symbols('theta_0')
+theta = sm.Matrix([theta_0])
+dtheta_0 = sm.symbols('dtheta_0')
+dtheta = sm.Matrix([dtheta_0])
+ddtheta_0 = sm.symbols('ddtheta_0')
+ddtheta = sm.Matrix([ddtheta_0])
 
 # 1st order 
 
@@ -49,12 +56,12 @@ poly_order = 4
 
 # 4th order
 
-theta_0, theta_1, theta_2, theta_3, theta_4 = sm.symbols('theta_0 theta_1 theta_2 theta_3 theta_4')
-theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3, theta_4])
-dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3 dtheta_4')
-dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4])
-ddtheta_0, ddtheta_1, ddtheta_2, ddtheta_3, ddtheta_4 = sm.symbols('ddtheta_0 ddtheta_1 ddtheta_2 ddtheta_3 ddtheta_4')
-ddtheta = sm.Matrix([ddtheta_0, ddtheta_1, ddtheta_2, ddtheta_3, ddtheta_4])
+# theta_0, theta_1, theta_2, theta_3, theta_4 = sm.symbols('theta_0 theta_1 theta_2 theta_3 theta_4')
+# theta = sm.Matrix([theta_0, theta_1, theta_2, theta_3, theta_4])
+# dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4 = sm.symbols('dtheta_0 dtheta_1 dtheta_2 dtheta_3 dtheta_4')
+# dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2, dtheta_3, dtheta_4])
+# ddtheta_0, ddtheta_1, ddtheta_2, ddtheta_3, ddtheta_4 = sm.symbols('ddtheta_0 ddtheta_1 ddtheta_2 ddtheta_3 ddtheta_4')
+# ddtheta = sm.Matrix([ddtheta_0, ddtheta_1, ddtheta_2, ddtheta_3, ddtheta_4])
 
 # Object coordinates in global frame (forward kinematics)
 fk_x, fk_z = sm.symbols('fk_x fk_z')
@@ -69,16 +76,17 @@ s, v, d = sm.symbols('s v d')
 tic = time.perf_counter()
 
 # Spine x,z in object base frame, defined as if it was reflected in the robot XY plane
+alpha = theta_0 
 # alpha = theta_0 + theta_1*v 
 # alpha = theta_0*v + 0.5*theta_1*v**2
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2 + (1/6)*theta_3*v**3
-alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2 + (1/6)*theta_3*v**3 + (1/24)*theta_4*v**4
+# alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2 + (1/6)*theta_3*v**3 + (1/24)*theta_4*v**4
 fk[0] = -L*sm.integrate(sm.sin(alpha),(v, 0, s)) # x. when theta=0, x=0.
 fk[1] = -L*sm.integrate(sm.cos(alpha),(v, 0, s)) # z. when theta=0, z=-L. 
 # A manual subsitution is needed here to get around a SymPy bug: https://github.com/sympy/sympy/issues/25093
 # TODO - remove when fix included in SymPy release
-fk = fk.subs(1/sm.sqrt(theta_1), sm.sqrt(1/theta_1))
+# fk = fk.subs(1/sm.sqrt(theta_1), sm.sqrt(1/theta_1))
 
 # FK position at d in cross section
 rot_alpha = sm.rot_axis3(alpha.subs(v,s))[:2,:2] # +ve rotations around robot base Y axis (CW in XZ plane)
@@ -91,8 +99,10 @@ fk = fk + D*rot_alpha@sm.Matrix([d, 0])
 # J_mid_static = fk_mid_static.jacobian(sm.Matrix([theta_0, theta_1]))
 # J_end_static = fk_end_static.jacobian(sm.Matrix([theta_0, theta_1]))
 # J_static = fk.jacobian(theta) 
+J_static = fk.jacobian(sm.Matrix([theta_0]))
 # J_static = fk.jacobian(sm.Matrix([theta_0, theta_1]))
-J_static = fk.jacobian(sm.Matrix([theta_0, theta_1, theta_2, theta_3, theta_4]))
+# J_static = fk.jacobian(sm.Matrix([theta_0, theta_1, theta_2, theta_3, theta_4]))
+# J_static = fk.jacobian(sm.Matrix([theta_0, theta_1, theta_2, theta_3, theta_4]))
 
 toc = time.perf_counter()
 print("FK gen time: " + str(toc-tic))
