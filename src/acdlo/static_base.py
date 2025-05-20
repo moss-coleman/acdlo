@@ -9,10 +9,20 @@ from pathlib import Path
 m_L, m_E, L, D = sm.symbols('m_L m_E L D')  # m_L - total mass of cable, m_E - mass of weighted end
 p = sm.Matrix([m_L, m_E, L, D])
 # Configuration variables
-theta_0, theta_1 = sm.symbols('theta_0 theta_1')
-theta = sm.Matrix([theta_0, theta_1])
-dtheta_0, dtheta_1 = sm.symbols('dtheta_0 dtheta_1')
-dtheta = sm.Matrix([dtheta_0, dtheta_1])
+
+# 1st order
+# theta_0, theta_1 = sm.symbols('theta_0 theta_1')
+# theta = sm.Matrix([theta_0, theta_1])
+# dtheta_0, dtheta_1 = sm.symbols('dtheta_0 dtheta_1')
+# dtheta = sm.Matrix([dtheta_0, dtheta_1])
+
+# 2nd order 
+
+theta_0, theta_1, theta_2 = sm.symbols('theta_0 theta_1 theta_2')
+theta = sm.Matrix([theta_0, theta_1, theta_2])
+dtheta_0, dtheta_1, dtheta_2 = sm.symbols('dtheta_0 dtheta_1 dtheta_2')
+dtheta = sm.Matrix([dtheta_0, dtheta_1, dtheta_2])
+
 # Integration variables
 s, d = sm.symbols('s d')
 # Gravity direction
