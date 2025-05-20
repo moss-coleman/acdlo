@@ -53,7 +53,8 @@ s, v, d = sm.symbols('s v d')
 tic = time.perf_counter()
 
 # Spine x,z in object base frame, defined as if it was reflected in the robot XY plane
-alpha = theta_0 + theta_1*v 
+# alpha = theta_0 + theta_1*v 
+alpha = theta_0*v + 0.5*theta_1*v**2
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
 # alpha = theta_0 + theta_1*v + 0.5*theta_2*v**2
